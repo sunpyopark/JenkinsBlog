@@ -32,11 +32,7 @@ def isDeployCandidate() {
 }
 
 pipeline {
-
-    agent {
-        dockerfile true
-    }
-
+    agent { dockerfile true }
     environment {
         appName = 'jenkins-blog'
 
@@ -45,7 +41,6 @@ pipeline {
         STORE_PATH = credentials('storePath')
         STORE_PASSWORD = credentials('storePassword')
     }
-
     stages {
         stage('Run Tests') {
             steps {
@@ -56,7 +51,6 @@ pipeline {
                 }
             }
         }
-
         stage('Checkout Keystore') {
             when { expression { return isDeployCandidate() } }
             steps {
@@ -70,7 +64,6 @@ pipeline {
                 ])
             }
         }
-
         stage('Build Bundle') {
             when { expression { return isDeployCandidate() } }
             steps {
@@ -81,7 +74,6 @@ pipeline {
                 }
             }
         }
-
         stage('Deploy App to Store') {
             when { expression { return isDeployCandidate() } }
             steps {
@@ -111,7 +103,6 @@ pipeline {
             }
         }
     }
-
     post {
         always {
             deleteDir()
