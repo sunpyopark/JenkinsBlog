@@ -2,7 +2,7 @@ class Constants {
 
     static final String MASTER_BRANCH = 'master'
 
-    static final String QA_BUILD = 'Qa'
+    static final String QA_BUILD = 'Debug'
     static final String RELEASE_BUILD = 'Release'
 
     static final String INTERNAL_TRACK = 'internal'
@@ -38,7 +38,7 @@ pipeline {
 
         KEY_PASSWORD = credentials('keyPassword')
         KEY_ALIAS = credentials('keyAlias')
-        STORE_PATH = credentials('storePath')
+        KEYSTORE = credentials('keystore')
         STORE_PASSWORD = credentials('storePassword')
     }
     stages {
@@ -51,26 +51,13 @@ pipeline {
                 }
             }
         }
-        stage('Checkout Keystore') {
-            when { expression { return isDeployCandidate() } }
-            steps {
-                echo 'Checking out keystore for signing'
-                checkout([$class                           : 'GitSCM',
-                          branches                         : [[name: '*/master']],
-                          doGenerateSubmoduleConfigurations: false,
-                          extensions                       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'android-keystore']],
-                          submoduleCfg                     : [],
-                          userRemoteConfigs                : [[credentialsId: 'GitHub', url: 'https://github.com/<your-keystore-repository>.git']]
-                ])
-            }
-        }
         stage('Build Bundle') {
             when { expression { return isDeployCandidate() } }
             steps {
                 echo 'Building'
                 script {
                     VARIANT = getBuildType()
-                    sh "./gradlew -PstorePass=${STORE_PASSWORD} -PfilePath=${env.WORKSPACE}/${STORE_PATH} -Palias=${KEY_ALIAS} -PkeyPass=${KEY_PASSWORD} bundle${VARIANT}"
+                    sh "./gradlew -PstorePass=${STORE_PASSWORD} -Pkeystore=${KEYSTORE} -Palias=${KEY_ALIAS} -PkeyPass=${KEY_PASSWORD} bundle${VARIANT}"
                 }
             }
         }
