@@ -69,7 +69,7 @@ pipeline {
                     VARIANT = getBuildType()
                     TRACK = getTrackType()
 
-                    if (TRACK == RELEASE_TRACK) {
+                    if (TRACK == Constants.RELEASE_TRACK) {
                         timeout(time: 5, unit: 'MINUTES') {
                             input "Proceed with deployment to ${TRACK}?"
                         }
