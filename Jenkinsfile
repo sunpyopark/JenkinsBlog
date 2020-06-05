@@ -34,16 +34,7 @@ def isDeployCandidate() {
 pipeline {
 
     agent {
-        dockerfile {
-            label 'linux-agent'
-            filename 'Dockerfile'
-            dir 'docker/jenkins'
-        }
-    }
-
-    options {
-        timestamps()
-        buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+        dockerfile true
     }
 
     environment {
