@@ -106,9 +106,6 @@ pipeline {
     post {
         always {
             deleteDir()
-            dir("${workspace}@tmp") {
-                deleteDir()
-            }
         }
     }
 }
