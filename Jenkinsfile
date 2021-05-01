@@ -75,7 +75,7 @@ pipeline {
                           doGenerateSubmoduleConfigurations: false,
                           extensions                       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'android-keystore']],
                           submoduleCfg                     : [],
-                          userRemoteConfigs                : [[credentialsId: 'GitHub', url: 'https://github.com/<your-keystore-repository>.git']]
+                          userRemoteConfigs                : [[credentialsId: 'GitHub', url: 'https://github.com/sunpyopark/JenkinsBlog.git']]
                 ])
             }
         }
